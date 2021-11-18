@@ -1,0 +1,10 @@
+body {
+    height: 100vh;
+}
+
+canvas {
+    min-width: 200px;
+    min-height: 300px;
+    max-width: 600px;
+    height: 80%;
+}
