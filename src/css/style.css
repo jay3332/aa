@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Antique&display=swap');
+
+* {
+    font-family: 'Shippori Antique', sans-serif;
+}
+
 body {
     height: 100vh;
 }

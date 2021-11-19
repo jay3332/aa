@@ -6,8 +6,8 @@ export default class Engine {
 
     constructor({
         canvas,
-        width = 600,
-        height = 900,
+        width = 750,
+        height = 1125,
     }: {
         canvas: HTMLCanvasElement,
         width?: number,
@@ -17,6 +17,7 @@ export default class Engine {
         canvas.width = width;
         canvas.height = height;
         this._ctx = canvas.getContext("2d")!;
+        this._ctx.imageSmoothingEnabled = true;
     }
 
     get width(): number {
@@ -35,6 +36,10 @@ export default class Engine {
         return [ Math.floor(this.width / 2), Math.floor(this.height / 2) ];
     }
 
+    get ctx(): CanvasRenderingContext2D {
+        return this._ctx;
+    }
+
     circle({
         x, 
         y,
@@ -46,28 +51,39 @@ export default class Engine {
         radius: number,
         fill?: string,
     }) {
+        this._ctx.beginPath();
         this._ctx.arc(x, y, radius, 0, 2 * Math.PI);
         if (fill) {
             this._ctx.fillStyle = fill;
             this._ctx.fill();
         }
+        this._ctx.closePath();
     }
 
     text({
         x,
         y,
-        font,
+        font = "Shippori Antique",
+        size,
         text,
         fill,
+        align = "center",
+        verticalAlign = "middle",
     }: {
         x: number,
         y: number,
         font?: string,
-        text: string,
+        size: number,
+        text: any,
         fill?: string,
+        align?: "left" | "right" | "center" | "start" | "end",
+        verticalAlign?: "alphabetic" | "bottom" | "hanging" | "ideographic" | "middle" | "top",
     }) {
-        if (font) this._ctx.font = font;
+        this._ctx.font = `${size}px ${font}`;
         if (fill) this._ctx.fillStyle = fill;
+
+        this._ctx.textAlign = align;
+        this._ctx.textBaseline = verticalAlign;
         this._ctx.fillText(text, x, y);
     }
 
@@ -90,11 +106,8 @@ export default class Engine {
         this._ctx.moveTo(x1, y1);
         this._ctx.lineTo(x2, y2);
         this._ctx.lineWidth = width;
-        if (fill) {
-            this._ctx.fillStyle = fill;
-            this._ctx.fill();
-            return
-        }
-        this._ctx.stroke()
+        if (fill) this._ctx.strokeStyle = fill;
+        this._ctx.stroke();
+        this._ctx.closePath();
     }
 }
